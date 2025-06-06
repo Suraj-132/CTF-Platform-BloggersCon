@@ -64,3 +64,13 @@ class ResetPasswordView(APIView):
         user.set_password(new_password)
         user.save()
         return Response({'message': 'Password reset successful'}, status=status.HTTP_200_OK)
+
+from rest_framework import generics, permissions
+from .serializers import UserProfileSerializer
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
