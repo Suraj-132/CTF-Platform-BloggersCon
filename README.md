@@ -9,7 +9,7 @@ A web-based CTF platform built using Django and Django REST Framework.
 
 ## 🧰 Tech Stack
 - Django, DRF
-- PostgreSQL
+- MYSQL
 - JWT Auth (SimpleJWT)
 - Postman (for API testing)
 

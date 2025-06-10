@@ -12,6 +12,12 @@ from django.conf import settings
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from rest_framework import generics, permissions
+from .serializers import UserProfileSerializer
+
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .throttles import LoginRateThrottle  # Make sure this path matches your file structure
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -65,8 +71,7 @@ class ResetPasswordView(APIView):
         user.save()
         return Response({'message': 'Password reset successful'}, status=status.HTTP_200_OK)
 
-from rest_framework import generics, permissions
-from .serializers import UserProfileSerializer
+
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
@@ -74,3 +79,10 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+    
+    
+class RateLimitedLoginView(TokenObtainPairView):
+    throttle_classes = [LoginRateThrottle]
+
+
+
