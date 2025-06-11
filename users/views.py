@@ -14,6 +14,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework import generics, permissions
 from .serializers import UserProfileSerializer
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
 
 
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -83,6 +86,26 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     
 class RateLimitedLoginView(TokenObtainPairView):
     throttle_classes = [LoginRateThrottle]
+
+
+class VerifyEmailView(APIView):
+    def get(self, request, uid, token):
+        try:
+            user = User.objects.get(pk=uid)
+        except User.DoesNotExist:
+            return Response({'error': 'Invalid user ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({'error': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.is_verified:
+            return Response({'message': 'Email already verified'}, status=status.HTTP_200_OK)
+
+        user.is_verified = True
+        user.save()
+
+        return Response({'message': 'Email verified successfully!'}, status=status.HTTP_200_OK)
+
 
 
 
