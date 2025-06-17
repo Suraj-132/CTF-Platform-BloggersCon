@@ -16,12 +16,6 @@
 #     def create(self, validated_data):
 #         return User.objects.create_user(**validated_data)
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['id', 'email', 'username', 'full_name', 'bio']
-#         read_only_fields = ['email', 'username']
-
 
 from rest_framework import serializers
 from .models import User
@@ -65,3 +59,9 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
         return user
+    
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio']
+        read_only_fields = ['email', 'username']

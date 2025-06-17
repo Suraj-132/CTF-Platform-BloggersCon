@@ -42,15 +42,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'rest_framework',
+    'Challenge',
     
 ]
 
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    },
+    ],
     'DEFAULT_THROTTLE_RATES': {
         'login': '5/minute',  # Allow 5 login attempts per minute
     },

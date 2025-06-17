@@ -5,16 +5,16 @@ from .models import User
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['id']
-    list_display = ['id', 'username', 'email', 'is_active', 'is_staff']
+    list_display = ['id', 'username', 'email', 'mobile_number', 'is_active', 'is_staff']
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'mobile_number', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_active')}),
         ('Important dates', {'fields': ('last_login',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2'),
+            'fields': ('username', 'email', 'mobile_number', 'password1', 'password2'),
         }),
     )
 
