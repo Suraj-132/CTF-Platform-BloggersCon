@@ -27,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     mobile_number = models.CharField(max_length=15, blank=True, null=True)
     full_name = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
-
+    score = models.IntegerField(default=0)
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

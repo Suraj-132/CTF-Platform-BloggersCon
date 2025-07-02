@@ -42,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
 
-        # ✅ Generate email verification token
+        # Generate email verification token
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
             reverse('verify-email', args=[uid, token])
         )
 
-        # ✅ Send email
+        # Send email
         send_mail(
             subject='Verify your email',
             message=f'Click the link to verify your email: {verification_url}',
@@ -63,5 +63,5 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio']
-        read_only_fields = ['email', 'username']
+        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio', 'score']
+        read_only_fields = ['email', 'username', 'score']

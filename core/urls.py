@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include('users.urls')),
     path('api/Challenge/', include('Challenge.urls')),
+    path('api/teams/', include('teams.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
