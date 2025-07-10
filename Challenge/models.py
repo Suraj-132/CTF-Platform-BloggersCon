@@ -44,7 +44,7 @@ class Challenge(models.Model):
     def save(self, *args, **kwargs):
         if self.flag and not self.flag_hash:
             self.flag_hash = hashlib.sha256(self.flag.encode()).hexdigest()
-            self.flag = ""  # Optionally clear the flag from DB
+            # self.flag = ""  # Optionally clear the flag from DB
         super().save(*args, **kwargs)
 
     def __str__(self):

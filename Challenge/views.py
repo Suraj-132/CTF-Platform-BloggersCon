@@ -31,7 +31,12 @@ class SubmitFlagView(APIView):
         challenge = get_object_or_404(Challenge, id=challenge_id)
 
         # Pass challenge instance into serializer context
-        serializer = FlagSubmissionSerializer(data=request.data, context={'challenge': challenge})
+        
+        serializer = FlagSubmissionSerializer(
+            data=request.data,
+            context={'challenge': challenge, 'request': request}
+        )
+
 
         if serializer.is_valid():
             return Response({"message": "Correct flag!"}, status=status.HTTP_200_OK)

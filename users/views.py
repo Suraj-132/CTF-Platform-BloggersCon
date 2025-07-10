@@ -17,10 +17,22 @@ from .serializers import UserProfileSerializer
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_exempt
+
 
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .throttles import LoginRateThrottle  # Make sure this path matches your file structure
+
+
+class RateLimitedLoginView(TokenObtainPairView):
+    throttle_classes = [LoginRateThrottle]
+
+    # @method_decorator(csrf_exempt)
+    # def dispatch(self, *args, **kwargs):
+    #     return super().dispatch(*args, **kwargs)
+
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -84,8 +96,8 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
     
     
-class RateLimitedLoginView(TokenObtainPairView):
-    throttle_classes = [LoginRateThrottle]
+# class RateLimitedLoginView(TokenObtainPairView):
+#     throttle_classes = [LoginRateThrottle]
 
 
 class VerifyEmailView(APIView):
