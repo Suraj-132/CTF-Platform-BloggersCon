@@ -39,5 +39,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    @property
+    def challenges_solved(self):
+        return self.solves.count()
+
     def __str__(self):
         return self.email

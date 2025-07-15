@@ -19,3 +19,5 @@ class TeamSolve(models.Model):
 
     def __str__(self):
         return f"{self.team.name} team solved {self.challenge.title}"
+    
+   

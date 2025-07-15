@@ -61,7 +61,9 @@ class UserSerializer(serializers.ModelSerializer):
         return user
     
 class UserProfileSerializer(serializers.ModelSerializer):
+    challenges_solved = serializers.ReadOnlyField()
+    
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio', 'score']
-        read_only_fields = ['email', 'username', 'score']
+        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio', 'score', 'challenges_solved']
+        read_only_fields = ['email', 'username', 'score', 'challenges_solved']
