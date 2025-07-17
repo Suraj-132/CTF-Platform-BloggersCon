@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'Challenge',
-    'teams',    
+    'teams',
+    'announcements',
 ]
 
 AUTH_USER_MODEL = 'users.User'

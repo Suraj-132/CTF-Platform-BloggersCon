@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/Challenge/', include('Challenge.urls')),
     path('api/teams/', include('teams.urls')),
+    path('api/announcements/', include('announcements.urls')),
     # path('', home),
 
     # #  Swagger & ReDoc documentation routes
