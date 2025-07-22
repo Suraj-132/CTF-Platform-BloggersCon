@@ -17,7 +17,7 @@ class ChallengeListView(generics.ListAPIView):
     serializer_class = ChallengeSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# ✅ Get details of a single challenge
+# ✅ Get details of a single challenge 
 class ChallengeDetailView(generics.RetrieveAPIView):
     queryset = Challenge.objects.filter(is_active=True)
     serializer_class = ChallengeSerializer
