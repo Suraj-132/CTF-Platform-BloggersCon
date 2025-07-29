@@ -6,9 +6,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class TeamMemberSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
         fields = ['id', 'username', 'full_name', 'score']
+    
+    def get_full_name(self, obj):
+        # Use username as fallback if full_name is empty
+        return obj.full_name if obj.full_name.strip() else obj.username
 
 class TeamSerializer(serializers.ModelSerializer):
     members = TeamMemberSerializer(many=True, read_only=True)
@@ -36,12 +42,30 @@ class TeamCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A team with this name already exists.")
         return value
     
+    def validate(self, data):
+        """Additional validation at the serializer level"""
+        user = self.context['request'].user
+        
+        # Check if user is already a member of any team
+        if user.teams.exists():
+            raise serializers.ValidationError("You cannot create a team while being a member of another team.")
+            
+        # Check if user is already a captain of any team  
+        if user.captained_teams.exists():
+            raise serializers.ValidationError("You cannot create multiple teams as captain.")
+            
+        return data
+    
     def create(self, validated_data):
         user = self.context['request'].user
         
-        # Check if user is already in a team (optional - remove if multiple teams allowed)
+        # Check if user is already a member of any team
         if user.teams.exists():
-            raise serializers.ValidationError("You are already a member of a team.")
+            raise serializers.ValidationError("You are already a member of a team. Leave your current team before creating a new one.")
+        
+        # Check if user is already a captain of any team
+        if user.captained_teams.exists():
+            raise serializers.ValidationError("You are already a captain of a team. You cannot captain multiple teams.")
         
         team = Team.objects.create(
             captain=user,

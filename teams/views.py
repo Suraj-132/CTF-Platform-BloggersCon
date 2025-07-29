@@ -1,5 +1,5 @@
 # teams/views.py
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -30,6 +30,17 @@ class TeamListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(captain=self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        # Use TeamCreateSerializer for validation and creation
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        team = serializer.save(captain=request.user)
+        
+        # Use TeamSerializer for the response to include captain details
+        response_serializer = TeamSerializer(team, context={'request': request})
+        headers = self.get_success_headers(response_serializer.data)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class TeamDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]

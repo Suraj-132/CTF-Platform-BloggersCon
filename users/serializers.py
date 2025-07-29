@@ -62,8 +62,15 @@ class UserSerializer(serializers.ModelSerializer):
     
 class UserProfileSerializer(serializers.ModelSerializer):
     challenges_solved = serializers.ReadOnlyField()
+    team_name = serializers.SerializerMethodField()
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio', 'score', 'challenges_solved']
-        read_only_fields = ['email', 'username', 'score', 'challenges_solved']
+        fields = ['id', 'email', 'username', 'mobile_number', 'full_name', 'bio', 'score', 'challenges_solved', 'team_name']
+        read_only_fields = ['email', 'username', 'score', 'challenges_solved', 'team_name']
+    
+    def get_team_name(self, obj):
+        """Get the name of the team the user is in (if any)"""
+        # Since user can only be in one team, get the first team
+        team = obj.teams.first()
+        return team.name if team else None
